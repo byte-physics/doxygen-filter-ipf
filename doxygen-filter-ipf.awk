@@ -24,7 +24,7 @@ function trim(str)
 
 # Split an already trimmed line into words
 # Returns the number of words
-function splitIntoWords(str, a, numEntries)
+function splitIntoWords(str, a)
 {
   return split(str,a,/[[:space:],&*]+/)
 }
