@@ -48,7 +48,12 @@ print 8
 End
 
 threadsafe Function FooBarThread()
-print 9
+	print 9
+End
+
+// decorators and return types
+static Function/DF FooBarStaticDFR()
+	print 7
 End
 
 /// My structure definition
