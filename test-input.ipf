@@ -66,3 +66,5 @@ static Structure struct2
 	string str
   variable var
 EndStructure
+
+StrConstant abcd = "This text is not a function declaration"
