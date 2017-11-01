@@ -59,11 +59,10 @@ End
 /// My structure definition
 Structure struct1
 	string str
-  variable var 
+  variable var
 EndStructure
 
 static Structure struct2
 	string str
-  variable var 
+  variable var
 EndStructure
-
