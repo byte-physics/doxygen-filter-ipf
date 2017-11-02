@@ -1,9 +1,11 @@
-# Proof of concept implementation for using doxygen to document Igor Pro procedures
-# This awk script serves as input filter for Igor procedures and produces a C++-ish version of the declarations
-# Tested with Igor Pro 6.37 and doxygen 1.8.10
+# Copyright: Thomas Braun, support (at) byte (minus) physics (dot) de
+# License: 3-clause BSD, see https://opensource.org/licenses/BSD-3-Clause
+# Version: 0.28
 #
-# Thomas Braun: 1/2016
-# Version: 0.27
+# Proof of concept implementation for using doxygen to document Igor Pro procedures.
+#
+# This awk script serves as input filter for Igor procedures and produces a C++-ish version of the code
+# Tested with Igor Pro 7.06 and doxygen 1.8.13. Works also with breathe and sphinx.
 
 # Supported Features:
 # -Functions
