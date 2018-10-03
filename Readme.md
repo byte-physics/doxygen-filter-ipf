@@ -24,9 +24,10 @@ Alternatively you can use the supplied example `Doxyfile`.
 
 - Execute doxygen
 
-An example of the result can be seen [here](http://www.byte-physics.de/Downloads/Manual-UnitTestingFramework-latest.pdf).
+An example of the result can be seen [here](https://docs.byte-physics.de/igor-unit-testing-framework/).
 
 ### Missing features
 
 - Igor help file generation
 - Function subtype support
+- Igor 8 support (multiple return values, ...)
