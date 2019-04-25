@@ -295,7 +295,7 @@ function handleParameter(params, a,  i, iOpt, str, entry)
 
   # global constants
   gsub(/\ystrconstant\y/,"const string",code)
-  gsub(/\yconstant\y/,"const variable",code)
+  gsub(/\yconstant\y/,"const double",code)
   # prevent that doxygen sees elseif as a function call
   gsub(/\yelseif\y/,"else if",code)
 
