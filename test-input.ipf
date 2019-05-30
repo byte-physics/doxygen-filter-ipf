@@ -67,4 +67,17 @@ static Structure struct2
   variable var
 EndStructure
 
+// parameters
+Function FooParamVar(var)
+	variable var
+End
+
+Function FooParamStr(str)
+	string str
+End
+
+Function FooParamStruct(s)
+	STRUCT struct1 &str
+End
+
 StrConstant abcd = "This text is not a function declaration"
