@@ -200,7 +200,7 @@ function handleParameter(params, a,  i, iOpt, str, entry)
             paramType = tolower(entries[1])
 
           # add asterisk for call-by-reference parameters
-          if(match(code,/\&/))
+          if(match(code,/&/))
             paramType = paramType "*"
 
           # translate module separator "#" to C++ namespace separator
@@ -233,7 +233,7 @@ function handleParameter(params, a,  i, iOpt, str, entry)
     # the C++ namespace separator
     # We don't have to translated references to constants in modules as
     # this is at least for independent modules impossible to use in Igor Pro.
-    if(match(code, /\y[A-Za-z0-9_-]+\y\#\y[A-Za-z0-9_-]+\y\(/))
+    if(match(code, /\y[A-Za-z0-9_-]+\y#\y[A-Za-z0-9_-]+\y\(/))
     {
       part = substr(code, RSTART, RLENGTH)
       gsub("#", "::", part)
