@@ -302,8 +302,9 @@ function handleParameter(params, a,  i, iOpt, str, entry)
   # fix case of static keyword
   gsub(/^Static\y/,"static",code)
 
-  # make threadsafe a valid c++11 attribute
+  # make threadsafe/override a valid c++11 attribute
   gsub(/^threadsafe\y/,"[[ threadsafe ]]",code)
+  gsub(/^override\y/,"[[ override ]]",code)
 
   if(insideStructure || insideFunction || insideMacro)
   {

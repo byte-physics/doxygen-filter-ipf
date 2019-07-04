@@ -51,6 +51,10 @@ threadsafe Function FooBarThread()
 	print 9
 End
 
+override Function FooBarOv()
+	print 9
+End
+
 // decorators and return types
 static Function/DF FooBarStaticDFR()
 	print 7
