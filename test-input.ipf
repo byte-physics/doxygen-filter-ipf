@@ -81,7 +81,7 @@ Function FooParamStr(str)
 End
 
 Function FooParamStruct(s)
-	STRUCT struct1 &str
+	STRUCT struct1 &s
 End
 
 StrConstant abcd = "This text is not a function declaration"
