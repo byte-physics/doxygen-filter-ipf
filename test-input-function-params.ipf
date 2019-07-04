@@ -35,3 +35,14 @@ Function myFuncParam5(param, [str1])
   struct myStructType& param
   string& str1
 end
+
+// multiple return value syntax, introduced with IP8
+Function [int64 out1, variable out2] myFuncParam6(int64 in)
+
+	return [out1, out2]
+end
+
+Function [int64 out, struct myStructType s, WAVE/T textwave] myFuncParam7(int64 in, [variable opt])
+
+	return [out, s, textwave]
+end

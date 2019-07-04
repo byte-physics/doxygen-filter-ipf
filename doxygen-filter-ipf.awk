@@ -82,7 +82,7 @@ function splitIntoWords(str, a, numEntries)
 # Split params into words and prefix each with "__Param__$i"
 # where $i is increased for every parameter
 # Returns the concatenation of all prefixed parameters
-function handleParameter(params, a,  i, iOpt, str, entry)
+function handleParameterOldStyle(params, a,  i, iOpt, str, entry)
 {
   numParams = splitIntoWords(params, a)
   str=""
@@ -105,6 +105,36 @@ function handleParameter(params, a,  i, iOpt, str, entry)
     if(i < numParams)
      str = str ", "
   }
+  return str
+}
+
+# New style parameters have already the correct type inline, but we still need
+# to handle optional parameters
+function handleParameterNewStyle(params, a, i, iOpt, str, entry)
+{
+  numParams = splitIntoWords(params, a)
+  str=""
+  iOpt=numParams
+  for(i=1; i <= numParams; i += 2)
+  {
+    # convert igor optional parameters to something doxygen understands
+    # igor dictates that the optional arguments are the last arguments,
+    # meaning no normal argument can follow the optional arguments
+    if(gsub(/[\[\]]/,"",a[i]) || i > iOpt)
+    {
+      gsub(/[\[\]]/,"",a[i + 1])
+      iOpt  = i
+      entry = a[i] " " a[i + 1] " = defaultValue"
+    }
+    else
+      entry = a[i] " " a[i + 1]
+
+    str = str "" entry
+
+    if(i < numParams - 1)
+     str = str ", "
+  }
+
   return str
 }
 
@@ -148,6 +178,54 @@ function handleParameter(params, a,  i, iOpt, str, entry)
     code = "}"
   }
   # begin of function declaration
+  else if(!insideFunction && match(code,/function[[:space:]]*\[.*\][[:space:]]+[A-Z0-9_]+[[:space:]]*\(/))
+  {
+    insideFunction=1
+
+    # don't use the parameter handling code for old style (IP6 and before) parameter definition
+    paramsToHandle=0
+
+    # add opening bracket, this also throws away any function subType
+    gsub(/\).*/,"){",code)
+
+    if(match(code,/function[[:space:]]*\[[^\[]+\]/))
+    {
+      returnParams = substr(code, RSTART, RLENGTH)
+      # print "return params: " returnParams
+
+      # remove "function " prefix
+      gsub(/function[[:space:]]*/, "", returnParams)
+
+      # remove [ and ]
+      returnParams = substr(returnParams, 2, length(returnParams) - 2)
+
+      # remove struct keyword
+      gsub(/\ystruct\y[[:space:]]*/, "", returnParams)
+
+      numWords = splitIntoWords(returnParams, entries)
+      types = ""
+      for(i=1; i <= numWords; i+=2)
+      {
+        types = types "" entries[i] ", "
+      }
+
+      gsub(/, $/, "", types)
+
+      # print "return params: " returnParams
+      # print "return types: " types
+
+      gsub(/function[[:space:]]*\[[^\[]+\]/, "std::tuple<" types ">", code)
+    }
+
+    if(match(code,/\(.*[a-z]+.*\)/))
+    {
+      paramStr = substr(code,RSTART+1,RLENGTH-2)
+
+      paramStrWithTypes = handleParameterNewStyle(paramStr, params)
+
+      code = substr(code,1,RSTART) "" paramStrWithTypes "" substr(code,RSTART+RLENGTH-1)
+    }
+  }
   else if(!insideFunction && match(code,/function[[:space:]]*(\/(df|wave|c|s|t|d))?[[:space:]]+[A-Z0-9_]+[[:space:]]*\(/))
   {
     insideFunction=1
@@ -172,7 +250,7 @@ function handleParameter(params, a,  i, iOpt, str, entry)
     {
       paramStr = substr(code,RSTART+1,RLENGTH-2)
 
-      paramStrWithTypes = handleParameter(paramStr, params)
+      paramStrWithTypes = handleParameterOldStyle(paramStr, params)
       paramsToHandle = numParams
       # print "paramStr __ " paramStr
       # print "paramStrWithTypes __ " paramStrWithTypes
