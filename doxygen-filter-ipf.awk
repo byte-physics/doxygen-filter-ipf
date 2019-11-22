@@ -113,21 +113,36 @@ function handleParameterOldStyle(params, a,  i, iOpt, str, entry)
 function handleParameterNewStyle(params, a, i, iOpt, str, entry)
 {
   numParams = splitIntoWords(params, a)
+
+  # print "numParams: " numParams
+
   str=""
   iOpt=numParams
   for(i=1; i <= numParams; i += 2)
   {
+    # print a[i]
+    # print a[i + 1]
+
     # convert igor optional parameters to something doxygen understands
     # igor dictates that the optional arguments are the last arguments,
     # meaning no normal argument can follow the optional arguments
     if(gsub(/[\[\]]/,"",a[i]) || i > iOpt)
     {
+      gsub(/[\[\]]/,"",a[i])
       gsub(/[\[\]]/,"",a[i + 1])
       iOpt  = i
       entry = a[i] " " a[i + 1] " = defaultValue"
     }
-    else
+    else if(gsub(/\[/,"",a[i + 1]))
+    {
+      gsub(/[\[\]]/,"",a[i + 1])
       entry = a[i] " " a[i + 1]
+      iOpt  = i
+    }
+    else
+    {
+      entry = a[i] " " a[i + 1]
+    }
 
     str = str "" entry
 
@@ -220,6 +235,8 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
     if(match(code,/\(.*[a-z]+.*\)/))
     {
       paramStr = substr(code,RSTART+1,RLENGTH-2)
+
+      # print "optional parameter: " paramStr
 
       paramStrWithTypes = handleParameterNewStyle(paramStr, params)
 
