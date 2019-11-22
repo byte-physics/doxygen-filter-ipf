@@ -23,12 +23,13 @@ BEGIN{
   output=""
   warning=""
 
-  menuEndCount    = 0
-  insideNamespace = 0
-  insideFunction  = 0
-  insideStructure = 0
-  insideMacro     = 0
-  insideMenu      = 0
+  menuEndCount     = 0
+  insideNamespace  = 0
+  insideFunction   = 0
+  insideStructure  = 0
+  insideMacro      = 0
+  insideMenu       = 0
+  insideASCIIBlock = 0
 
   namespace=""
 }
@@ -314,6 +315,21 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
     insideFunction=0
     code = "}"
   }
+  else if(!insideMacro && !insideFunction && match(code,/^(static )?Picture/))
+  {
+    insideMacro=1
+    gsub(/Picture/,"void",code)
+    code = code "(){"
+  }
+  else if(insideMacro && match(code,/ASCII85Begin/))
+  {
+    insideASCIIBlock=1
+  }
+  else if(insideASCIIBlock && match(code,/^ASCII85End$/))
+  {
+    insideASCIIBlock=0
+    code = "// " code
+  }
 
   if(insideFunction || insideMacro)
   {
@@ -419,6 +435,12 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
       warning = warning "\n" "warning " NR ": outside code \"" code "\""
 
     code = code ";"
+  }
+
+  # comment out code in ASCII85Begin/ASCII85End blocks
+  if(insideASCIIBlock)
+  {
+    code = "// " code
   }
 
   if(!insideMenu)
