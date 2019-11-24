@@ -23,12 +23,13 @@ BEGIN{
   output=""
   warning=""
 
-  menuEndCount    = 0
-  insideNamespace = 0
-  insideFunction  = 0
-  insideStructure = 0
-  insideMacro     = 0
-  insideMenu      = 0
+  menuEndCount     = 0
+  insideNamespace  = 0
+  insideFunction   = 0
+  insideStructure  = 0
+  insideMacro      = 0
+  insideMenu       = 0
+  insideASCIIBlock = 0
 
   namespace=""
 }
@@ -113,21 +114,36 @@ function handleParameterOldStyle(params, a,  i, iOpt, str, entry)
 function handleParameterNewStyle(params, a, i, iOpt, str, entry)
 {
   numParams = splitIntoWords(params, a)
+
+  # print "numParams: " numParams
+
   str=""
   iOpt=numParams
   for(i=1; i <= numParams; i += 2)
   {
+    # print a[i]
+    # print a[i + 1]
+
     # convert igor optional parameters to something doxygen understands
     # igor dictates that the optional arguments are the last arguments,
     # meaning no normal argument can follow the optional arguments
     if(gsub(/[\[\]]/,"",a[i]) || i > iOpt)
     {
+      gsub(/[\[\]]/,"",a[i])
       gsub(/[\[\]]/,"",a[i + 1])
       iOpt  = i
       entry = a[i] " " a[i + 1] " = defaultValue"
     }
-    else
+    else if(gsub(/\[/,"",a[i + 1]))
+    {
+      gsub(/[\[\]]/,"",a[i + 1])
       entry = a[i] " " a[i + 1]
+      iOpt  = i
+    }
+    else
+    {
+      entry = a[i] " " a[i + 1]
+    }
 
     str = str "" entry
 
@@ -221,6 +237,8 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
     {
       paramStr = substr(code,RSTART+1,RLENGTH-2)
 
+      # print "optional parameter: " paramStr
+
       paramStrWithTypes = handleParameterNewStyle(paramStr, params)
 
       code = substr(code,1,RSTART) "" paramStrWithTypes "" substr(code,RSTART+RLENGTH-1)
@@ -296,6 +314,21 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
   {
     insideFunction=0
     code = "}"
+  }
+  else if(!insideMacro && !insideFunction && match(code,/^(static )?Picture/))
+  {
+    insideMacro=1
+    gsub(/Picture/,"void",code)
+    code = code "(){"
+  }
+  else if(insideMacro && match(code,/ASCII85Begin/))
+  {
+    insideASCIIBlock=1
+  }
+  else if(insideASCIIBlock && match(code,/^ASCII85End$/))
+  {
+    insideASCIIBlock=0
+    code = "// " code
   }
 
   if(insideFunction || insideMacro)
@@ -402,6 +435,12 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
       warning = warning "\n" "warning " NR ": outside code \"" code "\""
 
     code = code ";"
+  }
+
+  # comment out code in ASCII85Begin/ASCII85End blocks
+  if(insideASCIIBlock)
+  {
+    code = "// " code
   }
 
   if(!insideMenu)

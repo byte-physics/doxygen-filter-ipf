@@ -85,3 +85,17 @@ Function FooParamStruct(s)
 End
 
 StrConstant abcd = "This text is not a function declaration"
+
+Picture Pic1
+	ASCII85Begin
+	M,6r;%14!\!!!!.8Ou6I!!!"5!!!!C#R18/!*gQ=PlLda"EQn$<!Wa8#^cngL]@DY'hLeZ<+nYd>>6
+	"J
+	ASCII85End
+End
+
+static Picture StaticPic2
+	ASCII85Begin
+	M,6r;%14!\!!!!.8Ou6I!!!"5!!!!C#R18/!*gQ=PlLda"EQn$<!Wa8#^cngL]@DY'hLeZ<+nYd>>6
+	"J
+	ASCII85End
+End

@@ -46,3 +46,8 @@ Function [int64 out, struct myStructType s, WAVE/T textwave] myFuncParam7(int64 
 
 	return [out, s, textwave]
 end
+
+Function [string data, string fName] myFuncParam8(string fileName[, string fileFilter, string message])
+
+	return ["", ""]
+End
