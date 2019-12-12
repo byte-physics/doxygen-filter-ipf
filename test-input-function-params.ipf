@@ -51,3 +51,33 @@ Function [string data, string fName] myFuncParam8(string fileName[, string fileF
 
 	return ["", ""]
 End
+
+// function modifiers
+
+static Function myFuncS1()
+End
+
+static Function myFuncS2(var)
+	variable var
+End
+
+threadsafe static Function myFuncST1()
+End
+
+threadsafe static Function myFuncST2(var)
+	variable var
+End
+
+override Function myFuncSTO1()
+End
+
+override Function myFuncSTO2(var)
+	variable var
+End
+
+// and this is not a function declaration
+SomeStuff Function notAFunc()
+
+// TODO currently broken
+static Function myFuncBroken(variable var)
+End
