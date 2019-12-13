@@ -194,7 +194,7 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
     code = "}"
   }
   # begin of function declaration
-  else if(!insideFunction && match(code,/function[[:space:]]*\[.*\][[:space:]]+[A-Z0-9_]+[[:space:]]*\(/))
+  else if(!insideFunction && match(code,/^((threadsafe|static|override)?[[:space:]]+)*function[[:space:]]*\[.*\][[:space:]]+[A-Z0-9_]+[[:space:]]*\(/))
   {
     insideFunction=1
 
@@ -244,7 +244,8 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
       code = substr(code,1,RSTART) "" paramStrWithTypes "" substr(code,RSTART+RLENGTH-1)
     }
   }
-  else if(!insideFunction && match(code,/function[[:space:]]*(\/(df|wave|c|s|t|d))?[[:space:]]+[A-Z0-9_]+[[:space:]]*\(/))
+  else if(!insideFunction && match(code,/^((threadsafe|static|override)?[[:space:]]+)*function[[:space:]]*(\/(df|wave|c|s|t|d))?[[:space:]]+[A-Z0-9_]+[[:space:]]*\(/))
+
   {
     insideFunction=1
     paramsToHandle=0
