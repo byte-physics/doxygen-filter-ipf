@@ -78,7 +78,22 @@ static variable myFuncS2(variable var){
 // and this is not a function declaration
 SomeStuff Function notAFunc();
 
-// TODO currently broken
-static variable myFuncBroken(__Param__1 variable, __Param__2 var){
-End
+variable Proto(){
+
+};
+
+variable Test1(variable a, string s, wave w, dfref d, proto f, rectf* st, int i, int64 i64, uint64 ui64, double do, complex c, variable opt = defaultValue){
+
+};
+
+variable Test2(variable* a, proto f, string* s = defaultValue){
+
+};
+variable Test3(struct* RECTF, string s = defaultValue){
+
+};
+
+string TestWithNastyPrefix(WaveRefWave waverefs){
+	WaveRefWave waveRefs
+};
 
