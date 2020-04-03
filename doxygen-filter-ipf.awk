@@ -122,7 +122,7 @@ function handleParameterOldStyle(params, a,  i, iOpt, str, entry)
   return str
 }
 
-# New style parameters have already the correct type inline, but we still need
+# New style inline parameters have already the correct type, but we still need
 # to handle optional parameters
 function handleParameterNewStyle(params, a, i, iOpt, str, entry)
 {
@@ -205,7 +205,7 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
     insideMacro=0
     code = "}"
   }
-  # begin of function declaration
+  # begin of function declaration with inline parameter declarations
   else if(!insideFunction && match(code,/^((threadsafe|static|override)?[[:space:]]+)*function[[:space:]]*\[.*\][[:space:]]+[A-Z0-9_]+[[:space:]]*\(/))
   {
     insideFunction=1
@@ -216,6 +216,7 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
     # add opening bracket, this also throws away any function subType
     gsub(/\).*/,"){",code)
 
+    # uses multiple return value syntax?
     if(match(code,/function[[:space:]]*\[[^\[]+\]/))
     {
       returnParams = substr(code, RSTART, RLENGTH)
@@ -455,6 +456,8 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
   {
     code = "// " code
   }
+
+  # print "frontSpace: __" frontSpace "__"
 
   if(!insideMenu)
   {
