@@ -1,0 +1,102 @@
+
+const double myConst=123;///< This is a really special number
+
+/// The first alphabet letters
+const string myStrConst="abcd";
+
+///@name Functions with different return types
+///@{
+variable FooBar(){
+print 1
+};
+
+/// Function with subtype
+///
+/// The subtype is currently ignored
+variable FooBarSubType(){
+print 1
+};
+
+variable FooBarVar(){
+print 2
+};
+
+dfr FooBarDFR(){
+print 3
+};
+
+complex FooBarComp(){
+print 4
+};
+
+string FooBarStr(){
+print 5
+};
+
+wave FooBarWave(){
+print 6
+};
+///@}
+
+// decorators
+static variable FooBarStatic(){
+print 7
+};
+
+[[ threadsafe ]] static variable FooBarStaticThreadsafe(){
+print 8
+};
+
+[[ threadsafe ]] variable FooBarThread(){
+	print 9
+};
+
+[[ override ]] variable FooBarOv(){
+	print 9
+};
+
+// decorators and return types
+static dfr FooBarStaticDFR(){
+	print 7
+};
+
+/// My structure definition
+struct struct1{;
+	string str;
+  variable var;
+};
+
+static struct struct2{;
+	string str;
+  variable var;
+};
+
+// parameters
+variable FooParamVar(variable var){
+	variable var
+};
+
+variable FooParamStr(string str){
+	string str
+};
+
+variable FooParamStruct(struct1* s){
+	STRUCT struct1 &s
+};
+
+const string abcd = "This text is not a function declaration";
+
+void Pic1(){
+	// ASCII85Begin
+	// M,6r;%14!\!!!!.8Ou6I!!!"5!!!!C#R18/!*gQ=PlLda"EQn$<!Wa8#^cngL]@DY'hLeZ<+nYd>>6
+	// "J
+	// ASCII85End
+};
+
+static void StaticPic2(){
+	// ASCII85Begin
+	// M,6r;%14!\!!!!.8Ou6I!!!"5!!!!C#R18/!*gQ=PlLda"EQn$<!Wa8#^cngL]@DY'hLeZ<+nYd>>6
+	// "J
+	// ASCII85End
+};
+
