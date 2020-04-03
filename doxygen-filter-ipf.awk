@@ -58,7 +58,7 @@ function nicifyWaveType(str)
 # Return the whitespace in front of the string in the
 # global variable frontSpace to be able
 # to reconstruct the indentation
-function trim(str)
+function trimAndRememberIndentation(str)
 {
   gsub(/[[:space:]]+$/,"",str)
 
@@ -69,6 +69,19 @@ function trim(str)
   }
   else
     frontSpace = ""
+
+  return str
+}
+
+# Remove whitespace at beginning and end of string
+function trim(str)
+{
+  gsub(/[[:space:]]+$/,"",str)
+
+  if(match(str, /^[[:space:]]+/))
+  {
+    return substr(str, RLENGTH + 1)
+  }
 
   return str
 }
@@ -166,8 +179,7 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
     code=$0
     comment=""
   }
-  # remove whitespace from front and back
-  code=trim(code)
+  code=trimAndRememberIndentation(code)
 
   if(match(code, /^#pragma independentModule\s*=\s*/))
   {
