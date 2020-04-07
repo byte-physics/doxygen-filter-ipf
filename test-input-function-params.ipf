@@ -78,6 +78,22 @@ End
 // and this is not a function declaration
 SomeStuff Function notAFunc()
 
-// TODO currently broken
-static Function myFuncBroken(variable var)
+Function Proto()
+
+End
+
+Function Test1(variable a, string s, wave w, dfref d, funcref Proto f, struct RECTF &st, int i, int64 i64, uint64 ui64, double do, complex c, [variable opt])
+
+End
+
+Function Test2(variable &a, funcref Proto f, [string &s])
+
+End
+
+Function Test3(struct RECTF& s [, string s])
+
+End
+
+Function/S TestWithNastyPrefix(waverefs)
+	Wave/WAVE waveRefs
 End

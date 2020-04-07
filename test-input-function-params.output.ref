@@ -1,0 +1,99 @@
+// functions with parameters
+variable myFuncParam1(variable var1){
+  variable var1
+};
+
+variable myFuncParam2(variable var1, string str1){
+  string str1
+  variable var1
+};
+
+struct myStructType{;
+variable v1;
+};
+
+/// This function has structure parameters, which are always call-by-reference
+///@param w1        input wave
+///@param str1      fancy version string
+///@param myStruct1 first working struct
+///@param myStruct2 second working struct
+///@param myStruct3 third working struct
+variable myFuncParam3(WaveText w1, string str1, myStructType* myStruct1, myStructType* myStruct2, myStructType* myStruct3){
+  struct myStructType& myStruct1
+  struct myStructType & myStruct2
+  struct myStructType &myStruct3
+  WaveText w1
+  string str1
+};
+
+variable myFuncParam4(myStructType* param){
+  struct myStructType& param
+};
+
+// normal parameters using call-by-reference
+variable myFuncParam5(myStructType* param, string* str1 = defaultValue){
+  struct myStructType& param
+  string& str1
+};
+
+// multiple return value syntax, introduced with IP8
+std::tuple<int64, variable> myFuncParam6(int64 in){
+
+	return [out1, out2]
+};
+
+std::tuple<int64, myStructType, WaveText> myFuncParam7(int64 in, variable opt = defaultValue){
+
+	return [out, s, textwave]
+};
+
+std::tuple<string, string> myFuncParam8(string fileName, string fileFilter = defaultValue, string message = defaultValue){
+
+	return ["", ""]
+};
+
+// function modifiers
+
+static variable myFuncS1(){
+};
+
+static variable myFuncS2(variable var){
+	variable var
+};
+
+[[ threadsafe ]] static variable myFuncST1(){
+};
+
+[[ threadsafe ]] static variable myFuncST2(variable var){
+	variable var
+};
+
+[[ override ]] variable myFuncSTO1(){
+};
+
+[[ override ]] variable myFuncSTO2(variable var){
+	variable var
+};
+
+// and this is not a function declaration
+SomeStuff Function notAFunc();
+
+variable Proto(){
+
+};
+
+variable Test1(variable a, string s, wave w, dfref d, proto f, rectf* st, int i, int64 i64, uint64 ui64, double do, complex c, variable opt = defaultValue){
+
+};
+
+variable Test2(variable* a, proto f, string* s = defaultValue){
+
+};
+variable Test3(struct* RECTF, string s = defaultValue){
+
+};
+
+string TestWithNastyPrefix(WaveRefWave waverefs){
+	WaveRefWave waveRefs
+};
+

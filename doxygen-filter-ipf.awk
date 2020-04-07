@@ -58,7 +58,7 @@ function nicifyWaveType(str)
 # Return the whitespace in front of the string in the
 # global variable frontSpace to be able
 # to reconstruct the indentation
-function trim(str)
+function trimAndRememberIndentation(str)
 {
   gsub(/[[:space:]]+$/,"",str)
 
@@ -73,11 +73,30 @@ function trim(str)
   return str
 }
 
+# Remove whitespace at beginning and end of string
+function trim(str)
+{
+  gsub(/[[:space:]]+$/,"",str)
+
+  if(match(str, /^[[:space:]]+/))
+  {
+    return substr(str, RLENGTH + 1)
+  }
+
+  return str
+}
+
 # Split an already trimmed line into words
 # Returns the number of words
-function splitIntoWords(str, a, numEntries)
+function splitIntoWords(str, a)
 {
   return split(str,a,/[[:space:],&*]+/)
+}
+
+# Split at comma
+function splitAtComma(str, a)
+{
+  return split(str,a,/,/)
 }
 
 # Split params into words and prefix each with "__Param__$i"
@@ -109,49 +128,92 @@ function handleParameterOldStyle(params, a,  i, iOpt, str, entry)
   return str
 }
 
-# New style parameters have already the correct type inline, but we still need
+# New style inline parameters have already the correct type, but we still need
 # to handle optional parameters
 function handleParameterNewStyle(params, a, i, iOpt, str, entry)
 {
-  numParams = splitIntoWords(params, a)
+  numParams = splitAtComma(params, tokenArray)
 
   # print "numParams: " numParams
 
   str=""
-  iOpt=numParams
-  for(i=1; i <= numParams; i += 2)
+  iOpt=1e6
+  for(i=1; i <= numParams; i += 1)
   {
-    # print a[i]
-    # print a[i + 1]
+    tokenArray[i] = trim(tokenArray[i])
+    # print "tokenArray[i]: " tokenArray[i]
+
+    if(match(tokenArray[i],/\[$/))
+      iOpt = i + 1
+    else if(match(tokenArray[i],/\[[a-z]+/))
+      iOpt = i
+
+    gsub(/[\[\]]/, "", tokenArray[i])
 
     # convert igor optional parameters to something doxygen understands
     # igor dictates that the optional arguments are the last arguments,
     # meaning no normal argument can follow the optional arguments
-    if(gsub(/[\[\]]/,"",a[i]) || i > iOpt)
+    if(i >= iOpt)
     {
-      gsub(/[\[\]]/,"",a[i])
-      gsub(/[\[\]]/,"",a[i + 1])
-      iOpt  = i
-      entry = a[i] " " a[i + 1] " = defaultValue"
-    }
-    else if(gsub(/\[/,"",a[i + 1]))
-    {
-      gsub(/[\[\]]/,"",a[i + 1])
-      entry = a[i] " " a[i + 1]
-      iOpt  = i
+      entry = formatSingleNewStyleParameter(tokenArray[i], 1)
     }
     else
     {
-      entry = a[i] " " a[i + 1]
+      entry = formatSingleNewStyleParameter(tokenArray[i], 0)
     }
 
     str = str "" entry
 
-    if(i < numParams - 1)
+    if(i < numParams)
      str = str ", "
   }
 
   return str
+}
+
+# Format the given token as inline function parameter
+# isOptional is a boolean parameter
+function formatSingleNewStyleParameter(token, isOptional,  numElements, name, type, paramLine)
+{
+  if(match(token,/&/))
+  {
+    typeSuffix = "*"
+  }
+  else
+  {
+    typeSuffix = ""
+  }
+
+  # translate module separator "#" to C++ namespace separator
+  gsub("#", "::", token)
+
+  numElements = splitIntoWords(token, a)
+
+  # print "a[1]: " a[1]
+  # print "a[2]: " a[2]
+  # print "a[3]: " a[3]
+
+  if(numElements == 3 && (a[1] == "funcref" || a[1] == "struct"))
+  {
+    type = a[2]
+    name = a[3]
+  }
+  else
+  {
+    type = a[1]
+    name = a[2]
+  }
+
+  type = tolower(type)
+
+  paramLine = nicifyWaveType(type) typeSuffix " " name
+
+  if(isOptional)
+  {
+    paramLine = paramLine " = defaultValue"
+  }
+
+  return paramLine
 }
 
 {
@@ -166,8 +228,7 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
     code=$0
     comment=""
   }
-  # remove whitespace from front and back
-  code=trim(code)
+  code=trimAndRememberIndentation(code)
 
   if(match(code, /^#pragma independentModule\s*=\s*/))
   {
@@ -193,7 +254,7 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
     insideMacro=0
     code = "}"
   }
-  # begin of function declaration
+  # begin of function declaration with inline parameter declarations
   else if(!insideFunction && match(code,/^((threadsafe|static|override)?[[:space:]]+)*function[[:space:]]*\[.*\][[:space:]]+[A-Z0-9_]+[[:space:]]*\(/))
   {
     insideFunction=1
@@ -204,6 +265,7 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
     # add opening bracket, this also throws away any function subType
     gsub(/\).*/,"){",code)
 
+    # uses multiple return value syntax?
     if(match(code,/function[[:space:]]*\[[^\[]+\]/))
     {
       returnParams = substr(code, RSTART, RLENGTH)
@@ -235,13 +297,15 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
 
     if(match(code,/\(.*[a-z]+.*\)/))
     {
-      paramStr = substr(code,RSTART+1,RLENGTH-2)
-
-      # print "optional parameter: " paramStr
-
+      paramsStartIndex = RSTART
+      paramsLength = RLENGTH
+      paramStr = substr(code, paramsStartIndex + 1, paramsLength - 2)
       paramStrWithTypes = handleParameterNewStyle(paramStr, params)
 
-      code = substr(code,1,RSTART) "" paramStrWithTypes "" substr(code,RSTART+RLENGTH-1)
+      # print "paramStr __ " paramStr
+      # print "paramStrWithTypes __ " paramStrWithTypes
+
+      code = substr(code, 1, paramsStartIndex) "" paramStrWithTypes "" substr(code, paramsStartIndex + paramsLength - 1)
     }
   }
   else if(!insideFunction && match(code,/^((threadsafe|static|override)?[[:space:]]+)*function[[:space:]]*(\/(df|wave|c|s|t|d))?[[:space:]]+[A-Z0-9_]+[[:space:]]*\(/))
@@ -267,15 +331,28 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
     # do we have function parameters
     if(match(code,/\(.*[a-z]+.*\)/))
     {
-      paramStr = substr(code,RSTART+1,RLENGTH-2)
+      paramsStartIndex = RSTART
+      paramsLength = RLENGTH
+      paramStr = substr(code, paramsStartIndex + 1,paramsLength - 2)
 
-      paramStrWithTypes = handleParameterOldStyle(paramStr, params)
-      paramsToHandle = numParams
+      if(match(paramStr, /^(variable|string|wave|dfref|funcref|struct|int|int64|uint64|double|complex)\y/))
+      {
+        # inline parameter declaration
+        paramStrWithTypes = handleParameterNewStyle(paramStr, params)
+      }
+      else
+      {
+        # old style parameter declaration in code in the function
+
+        paramStrWithTypes = handleParameterOldStyle(paramStr, params)
+        paramsToHandle = numParams
+
+        # print "paramsToHandle __ " paramsToHandle
+      }
+
       # print "paramStr __ " paramStr
       # print "paramStrWithTypes __ " paramStrWithTypes
-      # print "paramsToHandle __ " paramsToHandle
-
-      code = substr(code,1,RSTART) "" paramStrWithTypes "" substr(code,RSTART+RLENGTH-1)
+      code = substr(code, 1, paramsStartIndex) "" paramStrWithTypes "" substr(code, paramsStartIndex + paramsLength - 1)
     }
   }
   else if(insideFunction && paramsToHandle > 0)
@@ -443,6 +520,8 @@ function handleParameterNewStyle(params, a, i, iOpt, str, entry)
   {
     code = "// " code
   }
+
+  # print "frontSpace: __" frontSpace "__"
 
   if(!insideMenu)
   {
