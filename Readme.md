@@ -30,4 +30,3 @@ An example of the result can be seen [here](https://docs.byte-physics.de/igor-un
 
 - Igor help file generation
 - Function subtype support
-- Igor 8 support (multiple return values, ...)
