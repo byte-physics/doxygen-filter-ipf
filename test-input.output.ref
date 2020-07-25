@@ -21,7 +21,7 @@ variable FooBarVar(){
 print 2
 };
 
-dfr FooBarDFR(){
+dfref FooBarDFR(){
 print 3
 };
 
@@ -56,7 +56,7 @@ print 8
 };
 
 // decorators and return types
-static dfr FooBarStaticDFR(){
+static dfref FooBarStaticDFR(){
 	print 7
 };
 

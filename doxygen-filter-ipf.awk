@@ -318,7 +318,7 @@ function formatSingleNewStyleParameter(token, isOptional,  numElements, name, ty
 
     # different return types
     gsub(/function /,"variable ",code)
-    gsub(/function\/df/,"dfr",code)
+    gsub(/function\/df/,"dfref",code)
     gsub(/function\/wave/,"wave",code)
     gsub(/function\/c/,"complex",code)
     gsub(/function\/s/,"string",code)
