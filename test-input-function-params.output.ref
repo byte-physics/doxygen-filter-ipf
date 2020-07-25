@@ -52,6 +52,10 @@ std::tuple<string, string> myFuncParam8(string fileName, string fileFilter = def
 	return ["", ""]
 };
 
+std::tuple<DFREF> ReturnSomeFolder(){
+
+};
+
 // function modifiers
 
 static variable myFuncS1(){
