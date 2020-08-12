@@ -52,6 +52,10 @@ Function [string data, string fName] myFuncParam8(string fileName[, string fileF
 	return ["", ""]
 End
 
+Function [DFREF dfr] ReturnSomeFolder()
+
+End
+
 // function modifiers
 
 static Function myFuncS1()
