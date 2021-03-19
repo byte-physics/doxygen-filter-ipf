@@ -86,11 +86,11 @@ variable Proto(){
 
 };
 
-variable Test1(variable a, string s, wave w, dfref d, proto f, rectf* st, int i, int64 i64, uint64 ui64, double do, complex c, variable opt = defaultValue){
+variable Test1(variable a, string s, wave w, dfref d, Proto f, RECTF* st, int i, int64 i64, uint64 ui64, double do, complex c, variable opt = defaultValue){
 
 };
 
-variable Test2(variable* a, proto f, string* s = defaultValue){
+variable Test2(variable* a, Proto f, string* s = defaultValue){
 
 };
 
@@ -100,5 +100,17 @@ variable Test3(struct* RECTF, string s = defaultValue){
 
 string TestWithNastyPrefix(WaveRefWave waverefs){
 	WaveRefWave waveRefs
+};
+
+struct MyStruct{;
+	int32 count;
+};
+
+variable PA_ApplyPulseSortingOrder(wave setIndices, MyStruct* myStruct){
+};
+
+variable PA_GatherSettings(string win, MyStruct* myStruct){
+	string win
+	STRUCT MyStruct &myStruct
 };
 
