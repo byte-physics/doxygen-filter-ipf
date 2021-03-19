@@ -200,11 +200,9 @@ function formatSingleNewStyleParameter(token, isOptional,  numElements, name, ty
   }
   else
   {
-    type = a[1]
+    type = tolower(a[1])
     name = a[2]
   }
-
-  type = tolower(type)
 
   paramLine = nicifyWaveType(type) typeSuffix " " name
 

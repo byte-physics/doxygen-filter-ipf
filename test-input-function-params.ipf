@@ -101,3 +101,15 @@ End
 Function/S TestWithNastyPrefix(waverefs)
 	Wave/WAVE waveRefs
 End
+
+Structure MyStruct
+	int32 count
+EndStructure
+
+Function PA_ApplyPulseSortingOrder(WAVE setIndices, STRUCT MyStruct &myStruct)
+End
+
+Function PA_GatherSettings(win, myStruct)
+	string win
+	STRUCT MyStruct &myStruct
+End
