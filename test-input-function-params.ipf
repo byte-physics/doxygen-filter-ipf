@@ -113,3 +113,6 @@ Function PA_GatherSettings(win, myStruct)
 	string win
 	STRUCT MyStruct &myStruct
 End
+
+Function/S MyFuncWithOnlyOptionalParameters([variable channelType])
+End

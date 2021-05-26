@@ -333,7 +333,7 @@ function formatSingleNewStyleParameter(token, isOptional,  numElements, name, ty
       paramsLength = RLENGTH
       paramStr = substr(code, paramsStartIndex + 1,paramsLength - 2)
 
-      if(match(paramStr, /^(variable|string|wave|dfref|funcref|struct|int|int64|uint64|double|complex)\y/))
+      if(match(paramStr, /^\[?(variable|string|wave|dfref|funcref|struct|int|int64|uint64|double|complex)\y/))
       {
         # inline parameter declaration
         paramStrWithTypes = handleParameterNewStyle(paramStr, params)
