@@ -117,3 +117,6 @@ variable PA_GatherSettings(string win, MyStruct* myStruct){
 string MyFuncWithOnlyOptionalParameters(variable channelType = defaultValue){
 };
 
+variable MyFunc(WaveComplex wv){
+};
+

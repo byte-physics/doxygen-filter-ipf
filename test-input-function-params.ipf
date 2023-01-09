@@ -116,3 +116,6 @@ End
 
 Function/S MyFuncWithOnlyOptionalParameters([variable channelType])
 End
+
+Function MyFunc(WAVE/C wv)
+End
