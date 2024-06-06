@@ -119,3 +119,6 @@ End
 
 Function MyFunc(WAVE/C wv)
 End
+
+Function [WAVE outNum, WAVE/T outText] MyFuncyFunc(WAVE/D/Z param1, WAVE/T/Z param2, WAVE/Z/I param2, WAVE/R/Z param3, WAVE/C/Z param4)
+End

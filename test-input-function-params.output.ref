@@ -120,3 +120,6 @@ string MyFuncWithOnlyOptionalParameters(variable channelType = defaultValue){
 variable MyFunc(WaveComplex wv){
 };
 
+std::tuple<WAVE, WaveText> MyFuncyFunc(WaveDoubleOrNull param1, WaveTextOrNull param2, WaveIntegerOrNull param2, WaveRealOrNull param3, WaveComplexOrNull param4){
+};
+
