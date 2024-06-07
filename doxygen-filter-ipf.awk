@@ -317,6 +317,7 @@ function formatSingleNewStyleParameter(token, isOptional,  numElements, name, ty
       code = substr(code, 1, paramsStartIndex) "" paramStrWithTypes "" substr(code, paramsStartIndex + paramsLength - 1)
     }
   }
+  # begin of function declaration with old-schoool or inline parameter declarations
   else if(!insideFunction && match(code,/^((threadsafe|static|override)?[[:space:]]+)*function[[:space:]]*(\/(df|wave|c|s|t|d))?[[:space:]]+[A-Z0-9_]+[[:space:]]*\(/))
 
   {
@@ -342,7 +343,7 @@ function formatSingleNewStyleParameter(token, isOptional,  numElements, name, ty
     {
       paramsStartIndex = RSTART
       paramsLength = RLENGTH
-      paramStr = substr(code, paramsStartIndex + 1,paramsLength - 2)
+      paramStr = trim(substr(code, paramsStartIndex + 1,paramsLength - 2))
 
       if(match(paramStr, /^\[?(variable|string|wave|dfref|funcref|struct|int|int64|uint64|double|complex)\y/))
       {
