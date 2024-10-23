@@ -1,8 +1,11 @@
 
-const double myConst=123;///< This is a really special number
+const double myConst=123; ///< This is a really special number
 
 /// The first alphabet letters
 const string myStrConst="abcd";
+
+const string url = "https://example.com"; // test "efgh"
+const string someOtherUrl = "https://test.com";
 
 ///@name Functions with different return types
 ///@{

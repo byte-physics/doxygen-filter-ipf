@@ -227,7 +227,7 @@ function formatSingleNewStyleParameter(token, isOptional,  numElements, name, ty
 
 {
   # split current line into code and comment
-  if(match($0,/\/\/.*/))
+  if(match($0,/(\t| |^)\/\/.*/))
   {
     code=substr($0,1,RSTART-1)
     comment=substr($0,RSTART,RLENGTH)

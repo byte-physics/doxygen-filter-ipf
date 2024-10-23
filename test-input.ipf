@@ -4,6 +4,9 @@ constant myConst=123 ///< This is a really special number
 /// The first alphabet letters
 strconstant myStrConst="abcd"
 
+strConstant url = "https://example.com" // test "efgh"
+strConstant someOtherUrl = "https://test.com"
+
 ///@name Functions with different return types
 ///@{
 Function FooBar()
