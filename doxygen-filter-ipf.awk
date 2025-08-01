@@ -510,10 +510,10 @@ function formatSingleNewStyleParameter(token, isOptional,  numElements, name, ty
     code = nicifyWaveType(code)
   }
 
-  # remove menus=0 after an include statement
-  if(match(code,/^#include.*menus[[:space:]]*=[[:space:]]*0$/))
+  # remove specifiers after an include statement
+  if(match(code,/^#include.*(menus|version|optional)[[:space:]]*=?[[:space:]]*.*$/))
   {
-    gsub(/menus[[:space:]]*=[[:space:]]*0$/, "", code)
+    gsub(/,?[[:space:]]*(menus|version|optional)[[:space:]]*=?[[:space:]]*.*$/, "", code)
   }
 
   # code outside of function/macro definitions is "translated" into statements
