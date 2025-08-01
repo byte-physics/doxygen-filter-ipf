@@ -1,3 +1,7 @@
+#include "abcd"
+#include "efgh" menus=0
+#include "ijkl", optional
+#include "mnop", version=123, optional
 
 constant myConst=123 ///< This is a really special number
 
